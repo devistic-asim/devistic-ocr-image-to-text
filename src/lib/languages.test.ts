@@ -50,6 +50,7 @@ describe('catalog', () => {
   it('includes the requested languages and no duplicate codes', () => {
     const codes = LANGUAGES.map((language) => language.code);
     expect(new Set(codes).size).toBe(codes.length);
+    expect(codes).toHaveLength(123);
     for (const code of ['fas', 'pus', 'snd', 'pan', 'ben', 'tur', 'fra', 'deu', 'spa', 'chi_sim', 'chi_tra', 'jpn', 'kor', 'rus', 'por', 'ita', 'ind', 'msa', 'urd', 'ara', 'hin', 'eng']) {
       expect(codes).toContain(code);
     }

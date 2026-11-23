@@ -87,6 +87,7 @@ export const LANGUAGES: LanguageOption[] = [
 
   { code: 'mya', label: 'Burmese', group: 'East and Southeast Asia' },
   { code: 'ceb', label: 'Cebuano', group: 'East and Southeast Asia' },
+  { code: 'dzo', label: 'Dzongkha', group: 'East and Southeast Asia' },
   { code: 'fil', label: 'Filipino', group: 'East and Southeast Asia' },
   { code: 'jav', label: 'Javanese', group: 'East and Southeast Asia' },
   { code: 'khm', label: 'Khmer', group: 'East and Southeast Asia' },
@@ -120,6 +121,7 @@ export const LANGUAGES: LanguageOption[] = [
   { code: 'kir', label: 'Kyrgyz', group: 'Middle East and Central Asia' },
   { code: 'syr', label: 'Syriac', group: 'Middle East and Central Asia', rtl: true },
   { code: 'tgk', label: 'Tajik', group: 'Middle East and Central Asia' },
+  { code: 'tat', label: 'Tatar', group: 'Middle East and Central Asia' },
   { code: 'uig', label: 'Uyghur', group: 'Middle East and Central Asia', rtl: true },
   { code: 'uzb', label: 'Uzbek', group: 'Middle East and Central Asia' },
   { code: 'uzb_cyrl', label: 'Uzbek (Cyrillic)', group: 'Middle East and Central Asia' },
@@ -131,6 +133,7 @@ export const LANGUAGES: LanguageOption[] = [
   { code: 'yor', label: 'Yoruba', group: 'Africa' },
 
   { code: 'chr', label: 'Cherokee', group: 'Pacific and Americas' },
+  { code: 'hat', label: 'Haitian Creole', group: 'Pacific and Americas' },
   { code: 'iku', label: 'Inuktitut', group: 'Pacific and Americas' },
   { code: 'mri', label: 'Maori', group: 'Pacific and Americas' },
   { code: 'que', label: 'Quechua', group: 'Pacific and Americas' },
