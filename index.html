@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem('devistic-ocr:theme');
+          if (mode !== 'light' && mode !== 'dark' && mode !== 'system') mode = 'system';
+          var dark = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var root = document.documentElement;
+          root.dataset.theme = dark ? 'dark' : 'light';
+          root.dataset.themeMode = mode;
+          var meta = document.createElement('meta');
+          meta.name = 'theme-color';
+          meta.content = dark ? '#0B1220' : '#F5F9FC';
+          document.head.appendChild(meta);
+        } catch (error) {
+          document.documentElement.dataset.theme = 'light';
+          document.documentElement.dataset.themeMode = 'system';
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Devistic OCR — image to text in your browser</title>
+    <meta
+      name="description"
+      content="Free private image-to-text OCR. Line breaks, indents, and columns stay intact. Runs in your browser with no account and no API key."
+    />
+    <link rel="icon" href="%BASE_URL%favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="%BASE_URL%favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
