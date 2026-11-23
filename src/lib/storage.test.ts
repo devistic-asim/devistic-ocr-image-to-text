@@ -42,6 +42,25 @@ describe('storage', () => {
     expect(loaded.history[0].layoutText).toBe('سلام');
   });
 
+  it('keeps a combined language spec and drops codes that are not real', () => {
+    const storage = memoryStorage();
+    const bundle = defaultBundle();
+    bundle.settings.language = 'urd+eng+nope';
+    bundle.history = [{
+      id: 'h2',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      fileName: 'mix.png',
+      language: 'ara+eng',
+      confidence: 70,
+      layoutText: 'a',
+      plainText: 'a',
+    }];
+    saveBundle(storage, bundle);
+    const loaded = loadBundle(storage);
+    expect(loaded.settings.language).toBe('urd+eng');
+    expect(loaded.history[0].language).toBe('ara+eng');
+  });
+
   it('rejects a file that is not an export', () => {
     expect(() => parseBundle('{"hello":1}')).toThrow(ImportError);
     expect(() => parseBundle('not json')).toThrow(ImportError);

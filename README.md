@@ -12,7 +12,10 @@ Free image-to-text that runs entirely in your browser. Line breaks, indents, and
 
 - Add images by upload, drag-and-drop, or paste (`Ctrl`+`V` / `⌘`+`V` anywhere, or the Paste button)
 - Queue several images and run them on one reused Tesseract worker
-- English by default, plus Urdu, Arabic, Hindi, and other common Tesseract languages, downloaded the first time you pick them and cached in IndexedDB
+- English by default, plus every Tesseract language file the engine can download (Urdu, Arabic, Hindi, Persian, Pashto, Sindhi, Punjabi, Bengali, Chinese, Japanese, Korean, and the rest), in a searchable list
+- More than one language at once. Urdu + English, Arabic + English, and Persian + English are one-click presets. The worker is started with a combined spec such as `urd+eng`
+
+![Language picker with Urdu and English selected](docs/screenshot-languages.png)
 - Progress while the engine and language data load, then while the page is read
 - **Layout** text that keeps line breaks, paragraph gaps, indentation, and column spacing, or **Plain** text that reflows paragraphs
 - Optional grayscale, contrast, rotate, straighten, and crop before recognition
@@ -24,7 +27,7 @@ Free image-to-text that runs entirely in your browser. Line breaks, indents, and
 ## How to use
 
 1. Drop, upload, or paste an image. PNG, JPEG, WEBP, GIF, and BMP work best. Or choose **Try a sample**.
-2. Pick the language. English is the default. The first time you choose another language, its traineddata file downloads and is cached in this browser.
+2. Pick one or more languages. Search the list, or use **Urdu + English**. The first time you choose a language, its traineddata file downloads and is cached in this browser. You can combine up to three.
 3. If the photo is sideways, faint, or has a large margin, rotate it, raise the contrast, or crop it. Then choose **Extract text**.
 4. Use **Layout** when the arrangement matters (columns, indents, line breaks). Use **Plain** when you want paragraphs you can edit.
 5. Copy the text, or download it. Results are kept under **On this device** until you remove them or clear local data.
@@ -41,7 +44,9 @@ Tesseract’s plain string throws away geometry. Devistic OCR asks the worker fo
 2. Lines whose vertical centers are within about half a line-height share a row. A left column and a right column therefore stay on one line, with spaces between them.
 3. Place each word at `column = round((word.left − leftMargin) / characterWidth)`. The cursor then advances by the word’s painted width, so a larger heading does not open a fake gap before the next word. A normal inter-word gap stays a single space. A wide gap stays a run of spaces, which is what holds columns and tables.
 4. A vertical gap taller than the line itself becomes a blank line. Smaller gaps stay single line breaks, so wrapped lines are not turned into empty paragraphs. Leading spaces keep an indent.
-5. Right-to-left words are wrapped in Unicode isolates (`U+2066` … `U+2069`) so the bidi algorithm does not pull spatially placed words back together.
+5. Right-to-left words are wrapped in Unicode isolates (`U+2066` … `U+2069`) so the bidi algorithm does not pull spatially placed words back together. That still holds when a line mixes Urdu, Arabic, or Persian with English. Plain text uses `unicode-bidi: plaintext`, so each paragraph takes its direction from its first strong character.
+
+A combined selection is passed to Tesseract as one spec (`urd+eng`). The picker only lists languages whose `4.0.0_best_int` traineddata is published for Tesseract.js. Orientation data and packages that are not actually downloadable are left out.
 
 **Plain mode** ignores the grid. It reads full-width regions first, then the left column top to bottom, then the right column. Inside a paragraph, lines that share a wide vertical gutter are split the same way: the left side is joined into a paragraph, then the right side. Other lines are joined with spaces. A hyphen at the end of a line is glued to the next line when that line starts with a letter.
 

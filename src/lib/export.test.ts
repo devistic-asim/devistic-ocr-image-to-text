@@ -38,6 +38,17 @@ describe('exports', () => {
     expect(parsed.image.width).toBe(10);
   });
 
+  it('names every language in a combined spec', () => {
+    const markdown = resultMarkdown({
+      fileName: 'note.png',
+      language: 'urd+eng',
+      confidence: 80,
+      layoutText: 'سلام Hello',
+      plainText: 'سلام Hello',
+    });
+    expect(markdown).toContain('Language: Urdu + English (`urd+eng`)');
+  });
+
   it('writes one section per history entry', () => {
     const text = historyAsText([{
       id: '1',

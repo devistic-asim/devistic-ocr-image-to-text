@@ -1,5 +1,5 @@
 import Tesseract from 'tesseract.js';
-import { languageByCode } from '../lib/languages';
+import { formatLanguageSpec, languageLabel } from '../lib/languages';
 import type { OcrDocument } from '../types';
 import { mapRecognition } from './mapResult';
 import { progressFraction, progressLabel } from './progress';
@@ -23,12 +23,13 @@ export async function recognizeCanvas(
   language: string,
   onProgress: (update: EngineProgress) => void,
 ): Promise<OcrDocument> {
-  const label = languageByCode(language).label;
+  const spec = formatLanguageSpec(language);
+  const label = languageLabel(spec);
   onLog = (status, progress) => {
     onProgress({ label: progressLabel(status, label), fraction: progressFraction(progress) });
   };
   try {
-    const instance = await ensureWorker(language);
+    const instance = await ensureWorker(spec);
     const result = await instance.recognize(canvas, {}, { text: true, blocks: true });
     return mapRecognition(result.data);
   } catch (error) {

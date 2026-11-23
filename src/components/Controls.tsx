@@ -1,7 +1,7 @@
-import { LANGUAGES } from '../lib/languages';
 import type { Settings } from '../lib/storage';
 import type { QueueItem } from '../types';
 import { Hint } from './Hint';
+import { LanguagePicker } from './LanguagePicker';
 
 export function Controls({
   settings,
@@ -20,36 +20,12 @@ export function Controls({
   onRerun: () => void;
   onStop: () => void;
 }) {
-  const featured = LANGUAGES.filter((language) => language.featured);
-  const rest = LANGUAGES.filter((language) => !language.featured);
   const progress = item?.status === 'running' ? item.progress : 0;
   const label = item?.status === 'running' ? item.progressLabel : 'Waiting';
 
   return (
     <section className="controls" aria-label="Recognition options">
-      <label className="field">
-        <span>
-          Language
-          <Hint text="English is ready to use. Other languages download the first time you pick them and stay cached in this browser. The image is not part of that download." />
-        </span>
-        <select
-          id="language"
-          name="language"
-          value={settings.language}
-          onChange={(event) => onSettings({ language: event.target.value })}
-        >
-          <optgroup label="Common">
-            {featured.map((language) => (
-              <option key={language.code} value={language.code}>{language.label}</option>
-            ))}
-          </optgroup>
-          <optgroup label="More languages">
-            {rest.map((language) => (
-              <option key={language.code} value={language.code}>{language.label}</option>
-            ))}
-          </optgroup>
-        </select>
-      </label>
+      <LanguagePicker settings={settings} onSettings={onSettings} />
 
       <div className="field field-row">
         <label className="check">

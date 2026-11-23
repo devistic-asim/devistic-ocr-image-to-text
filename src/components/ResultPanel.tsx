@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { isRtlLanguage } from '../lib/languages';
+import { isRtlSpec } from '../lib/languages';
 import type { OutputMode } from '../lib/storage';
 import { wordStats } from '../lib/layout';
 import type { QueueItem } from '../types';
@@ -25,7 +25,8 @@ export function ResultPanel({
   const recognition = item?.recognition;
   const text = recognition ? (mode === 'layout' ? recognition.layoutText : recognition.plainText) : '';
   const stats = recognition ? wordStats(recognition.blocks) : null;
-  const dir = recognition && mode === 'plain' && isRtlLanguage(recognition.language) ? 'rtl' : 'ltr';
+  const mixedScript = Boolean(recognition && isRtlSpec(recognition.language));
+  const dir = mode === 'layout' || !mixedScript ? 'ltr' : 'auto';
   const narrow = useNarrow();
 
   return (
@@ -83,7 +84,7 @@ export function ResultPanel({
         spellCheck={mode === 'plain'}
         dir={dir}
         wrap={mode === 'layout' && !narrow ? 'off' : 'soft'}
-        className={mode === 'layout' ? 'mono' : undefined}
+        className={[mode === 'layout' ? 'mono' : '', mode === 'plain' && mixedScript ? 'bidi-plain' : ''].filter(Boolean).join(' ') || undefined}
         placeholder={item ? 'Extract text to fill this box. You can edit the result before you copy it.' : 'Add an image to get started.'}
         aria-label={mode === 'layout' ? 'Layout text' : 'Plain text'}
         onChange={(event) => onChangeText(event.target.value)}

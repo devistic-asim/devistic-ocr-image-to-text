@@ -226,6 +226,12 @@ export function orderBlocksForReading(blocks: OcrBlock[]): OcrBlock[] {
   return ordered;
 }
 
+function linePlain(line: OcrLine): string {
+  const words = wordsOf(line);
+  if (words.length > 1) return words.map((word) => word.text.trim()).filter(Boolean).join(' ');
+  return line.text;
+}
+
 function joinParagraph(lines: string[]): string {
   let result = '';
   for (const raw of lines) {
@@ -276,7 +282,7 @@ function reflowParagraph(lines: OcrLine[], fallback: string): string {
 
   const flushProse = () => {
     if (prose.length === 0) return;
-    const text = joinParagraph(prose.map((line) => line.text));
+    const text = joinParagraph(prose.map(linePlain));
     if (text) chunks.push(text);
     prose = [];
   };
@@ -285,7 +291,7 @@ function reflowParagraph(lines: OcrLine[], fallback: string): string {
     if (columns.length === 0) return;
     const gutter = sharedGutter(columns);
     if (gutter === null) {
-      const text = joinParagraph(columns.map((line) => line.text));
+      const text = joinParagraph(columns.map(linePlain));
       if (text) chunks.push(text);
     } else {
       const left: string[] = [];

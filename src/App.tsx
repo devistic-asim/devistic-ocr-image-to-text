@@ -10,7 +10,7 @@ import { QueueList } from './components/QueueList';
 import { ResultPanel } from './components/ResultPanel';
 import { clearLanguageCache, clearOwnStorage } from './lib/cache';
 import { downloadText, historyAsText, resultJson, resultMarkdown, safeBaseName } from './lib/export';
-import { languageByCode } from './lib/languages';
+import { languageLabel } from './lib/languages';
 import { preserveLayout, reflowText, weightedConfidence } from './lib/layout';
 import { loadHtmlImage, renderProcessed, thumbnailDataUrl } from './lib/preprocess';
 import {
@@ -377,6 +377,18 @@ export default function App() {
     addFiles([new File([blob], 'sample-page.png', { type: 'image/png' })]);
   }
 
+  async function addBilingualSample() {
+    setSettings((current) => ({ ...current, language: 'urd+eng' }));
+    const response = await fetch(`${import.meta.env.BASE_URL}samples/sample-bilingual.png`);
+    if (!response.ok) {
+      setMessage('The Urdu and English sample is missing.');
+      return;
+    }
+    const blob = await response.blob();
+    addFiles([new File([blob], 'sample-bilingual.png', { type: 'image/png' })]);
+    setMessage('Urdu + English is selected. Extract text to read both scripts. The first run downloads both language files.');
+  }
+
   function currentText(): string {
     if (!shown?.recognition) return '';
     return settings.outputMode === 'layout' ? shown.recognition.layoutText : shown.recognition.plainText;
@@ -500,6 +512,7 @@ export default function App() {
           onBrowse={() => fileRef.current?.click()}
           onPaste={() => void paste()}
           onSample={() => void addSample()}
+          onBilingualSample={() => void addBilingualSample()}
         />
         <input
           ref={fileRef}
@@ -577,8 +590,9 @@ export default function App() {
               and it joins wrapped lines into paragraphs. A hyphen at the end of a line is glued to the next line when that line starts with a letter.
             </p>
             <p>
-              Right-to-left words are wrapped in Unicode isolates so the browser does not pull columns back together.
-              The current language is {languageByCode(settings.language).label}.
+              Right-to-left words are wrapped in Unicode isolates so the browser does not pull columns back together,
+              including when a line mixes Urdu or Arabic with English. Plain text uses per-paragraph direction.
+              The current languages are {languageLabel(settings.language)} ({settings.language}).
               Word boxes are colored by confidence: green from 85%, yellow from 70%, red below that.
             </p>
           </div>

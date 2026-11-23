@@ -1,4 +1,4 @@
-import { languageByCode } from './languages';
+import { formatLanguageSpec, languageLabel } from './languages';
 import type { HistoryEntry } from './storage';
 import type { OcrBlock } from '../types';
 
@@ -18,11 +18,11 @@ export function resultMarkdown(input: {
   layoutText: string;
   plainText: string;
 }): string {
-  const language = languageByCode(input.language);
+  const spec = formatLanguageSpec(input.language);
   return [
     `# ${input.fileName}`,
     '',
-    `- Language: ${language.label} (\`${language.code}\`)`,
+    `- Language: ${languageLabel(spec)} (\`${spec}\`)`,
     `- Mean confidence: ${Math.round(input.confidence)}%`,
     '',
     '## Layout',
@@ -46,13 +46,13 @@ export function resultJson(input: {
   plainText: string;
   blocks: OcrBlock[];
 }): string {
-  const language = languageByCode(input.language);
+  const spec = formatLanguageSpec(input.language);
   return JSON.stringify({
     app: 'devistic-ocr',
     version: 1,
     fileName: input.fileName,
-    language: language.code,
-    languageLabel: language.label,
+    language: spec,
+    languageLabel: languageLabel(spec),
     confidence: round(input.confidence),
     image: { width: input.width, height: input.height },
     layoutText: input.layoutText,
@@ -63,11 +63,10 @@ export function resultJson(input: {
 
 export function historyAsText(entries: HistoryEntry[]): string {
   const parts = entries.map((entry) => {
-    const language = languageByCode(entry.language);
     return [
       `## ${entry.fileName}`,
       `When: ${entry.createdAt}`,
-      `Language: ${language.label}`,
+      `Language: ${languageLabel(entry.language)}`,
       `Mean confidence: ${Math.round(entry.confidence)}%`,
       '',
       entry.layoutText.trim(),

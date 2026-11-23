@@ -5,11 +5,13 @@ export function DropZone({
   onBrowse,
   onPaste,
   onSample,
+  onBilingualSample,
 }: {
   compact: boolean;
   onBrowse: () => void;
   onPaste: () => void;
   onSample: () => void;
+  onBilingualSample: () => void;
 }) {
   return (
     <section className={compact ? 'drop compact' : 'drop'} aria-labelledby="add-heading">
@@ -34,7 +36,13 @@ export function DropZone({
           <button type="button" className="btn btn-ghost" onClick={onSample}>
             Try a sample
           </button>
-          <Hint text="A short page with a paragraph, an indent, and two columns, so you can see how layout is kept." />
+          <Hint text="A short English page with a paragraph, an indent, and two columns, so you can see how layout is kept." />
+        </span>
+        <span className="with-hint">
+          <button type="button" className="btn btn-ghost" onClick={onBilingualSample}>
+            Urdu + English sample
+          </button>
+          <Hint text="Loads a mixed page and selects Urdu + English. The first run downloads both language files." />
         </span>
       </div>
       <p className="fine">PNG, JPEG, WEBP, GIF, or BMP.</p>

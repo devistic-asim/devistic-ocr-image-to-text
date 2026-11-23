@@ -126,6 +126,17 @@ describe('preserveLayout', () => {
 });
 
 describe('reflowText', () => {
+  it('puts a space between words when the line string glued them together', () => {
+    const blocks = [
+      block([
+        paragraph([
+          line('متنہے', [word('متن', 0, 0, 40, 20), word('ہے', 50, 0, 80, 20)], 0, 20),
+        ]),
+      ]),
+    ];
+    expect(reflowText(blocks)).toBe('متن ہے');
+  });
+
   it('joins wrapped lines and keeps paragraphs apart', () => {
     const blocks = [
       block([

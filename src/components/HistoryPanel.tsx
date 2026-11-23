@@ -1,4 +1,4 @@
-import { languageByCode } from '../lib/languages';
+import { languageLabel } from '../lib/languages';
 import type { HistoryEntry } from '../lib/storage';
 
 export function HistoryPanel({
@@ -45,7 +45,7 @@ export function HistoryPanel({
               <button type="button" className="queue-main" onClick={() => onOpen(entry)}>
                 <span className="queue-name">{entry.fileName}</span>
                 <span className="fine">
-                  {languageByCode(entry.language).label} · {Math.round(entry.confidence)}% · {formatWhen(entry.createdAt)}
+                  {languageLabel(entry.language)} · {Math.round(entry.confidence)}% · {formatWhen(entry.createdAt)}
                 </span>
               </button>
               <button type="button" className="icon-btn" aria-label={`Remove ${entry.fileName} from history`} onClick={() => onRemove(entry.id)}>

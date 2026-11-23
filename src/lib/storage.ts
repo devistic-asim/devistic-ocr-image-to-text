@@ -1,4 +1,4 @@
-import { languageByCode } from './languages';
+import { formatLanguageSpec } from './languages';
 
 export const THEME_KEY = 'devistic-ocr:theme';
 export const DATA_KEY = 'devistic-ocr:data';
@@ -73,12 +73,11 @@ export function parseTheme(value: unknown): ThemeMode {
 
 export function parseSettings(value: unknown): Settings {
   const record = isRecord(value) ? value : {};
-  const language = typeof record.language === 'string' ? record.language : 'eng';
   const contrast = typeof record.contrast === 'number' && Number.isFinite(record.contrast)
     ? Math.min(2.5, Math.max(0.5, record.contrast))
     : 1;
   return {
-    language: languageByCode(language).code === language ? language : 'eng',
+    language: formatLanguageSpec(typeof record.language === 'string' ? record.language : 'eng'),
     outputMode: record.outputMode === 'plain' ? 'plain' : 'layout',
     grayscale: record.grayscale === true,
     contrast,
@@ -96,7 +95,7 @@ function parseHistoryEntry(value: unknown): HistoryEntry | null {
     id: value.id.slice(0, 80),
     createdAt: typeof value.createdAt === 'string' ? value.createdAt : new Date(0).toISOString(),
     fileName: value.fileName.slice(0, 180),
-    language: languageByCode(typeof value.language === 'string' ? value.language : 'eng').code,
+    language: formatLanguageSpec(typeof value.language === 'string' ? value.language : 'eng'),
     confidence: Math.min(100, Math.max(0, confidence)),
     layoutText: value.layoutText.slice(0, 200_000),
     plainText: value.plainText.slice(0, 200_000),
